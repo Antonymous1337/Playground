@@ -11,26 +11,27 @@ import SwiftUI
 struct Provider: AppIntentTimelineProvider {
     
      // when there is no data, how will it look like
-    func placeholder(in context: Context) -> SimpleEntry {
-        SimpleEntry(date: Date(), configuration: ConfigurationAppIntent())
+    func placeholder(in context: Context) -> DayEntry {
+        DayEntry(date: Date(), configuration: ConfigurationAppIntent())
     }
 
     // How widget looks like, RIGHT NOW. Can be useful for when the user is trying to choose the app widget for them, USE USER DATA! Can be tricky when API or Network calls are necessary
-    func snapshot(for configuration: ConfigurationAppIntent, in context: Context) async -> SimpleEntry {
-        SimpleEntry(date: Date(), configuration: configuration)
+    func snapshot(for configuration: ConfigurationAppIntent, in context: Context) async -> DayEntry {
+        DayEntry(date: Date(), configuration: configuration)
     }
     
-    func timeline(for configuration: ConfigurationAppIntent, in context: Context) async -> Timeline<SimpleEntry> {
+    func timeline(for configuration: ConfigurationAppIntent, in context: Context) async -> Timeline<DayEntry> {
         
         // "entries" are another word for widget data
-        var entries: [SimpleEntry] = []
+        var entries: [DayEntry] = []
 
-        // Generate a timeline consisting of five entries an hour apart, starting from the current date.
+        // Generate a timeline consisting of 7 entries an day apart, starting from the current date.
         let currentDate = Date()
-        // 5 hours of date data up front per query
-        for hourOffset in 0 ..< 5 {
-            let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
-            let entry = SimpleEntry(date: entryDate, configuration: configuration)
+        // 7 days of date data up front per query
+        for dayOffset in 0 ..< 7 {
+            let entryDate = Calendar.current.date(byAdding: .day, value: dayOffset, to: currentDate)!
+            let startDate = Calendar.current.startOfDay(for: entryDate) // make sure updates happen at the START of the day, when midnight strikes
+            let entry = DayEntry(date: startDate, configuration: configuration)
             entries.append(entry)
         }
 
@@ -47,8 +48,8 @@ struct Provider: AppIntentTimelineProvider {
 }
 
 // Data that populates the widget
-struct SimpleEntry: TimelineEntry {
-    let date: Date
+struct DayEntry: TimelineEntry {
+    let date: Date // Date is manditory? It is used to know when to update the view with pre-entered entry data
     let configuration: ConfigurationAppIntent
 }
 
@@ -59,15 +60,27 @@ struct Widget_PracticeEntryView : View {
     var entry: Provider.Entry
 
     var body: some View {
-        VStack {
-            Text("Time:")
-            Text(entry.date, style: .time)
-
-            Text("Favorite Emoji:")
-            Text(entry.configuration.favoriteEmoji)
+        ZStack {
+            ContainerRelativeShape()
+                .fill(.red.gradient)
             
-            Text("Test:")
-            Text(String(entry.configuration.test))
+            VStack {
+                HStack(spacing: 4) {
+                    Text("⛄️")
+                        .font(.title)
+                    Text(entry.date.formatted(.dateTime.weekday(.wide)))
+                        .font(.title3)
+                }
+                .minimumScaleFactor(0.001)
+                .lineLimit(1)
+                
+                
+                Text(entry.date.formatted(.dateTime.day()))
+                    .font(Font.system(size: 500))
+                    .minimumScaleFactor(0.001)
+                    .bold()
+            }
+            .padding()
         }
     }
 }
@@ -83,8 +96,9 @@ struct Widget_Practice: Widget {
             Widget_PracticeEntryView(entry: entry)
                 .containerBackground(.fill.tertiary, for: .widget)
         }
-        .configurationDisplayName("Display Name in Bold Text!")
-        .description("Smaller, more subtle display text for extra user information")
+        .contentMarginsDisabled() // TO MAKE FULL SCREEN COLOR BACKGROUND, .ignoreSafeArea wont work
+        .configurationDisplayName("Monthly Style Widget!")
+        .description(Text("The theme of the widget changes based on the month! :D"))
     }
 }
 
@@ -102,9 +116,12 @@ extension ConfigurationAppIntent {
     }
 }
 
+// multiple previes sizes, .systemSmall to .systemExtraLarge
+// Don't just scale up widgets to a bigger size for no reason. Add more info for bigger-sized widgets. This system size just affects the PREVIEW, not whats actually available for the user
 #Preview(as: .systemSmall) {
     Widget_Practice()
 } timeline: {
-    SimpleEntry(date: .now, configuration: .smiley)
-    SimpleEntry(date: .now, configuration: .starEyes)
+    // example entries to play around with in the preview
+    DayEntry(date: .now, configuration: .smiley)
+    DayEntry(date: .now, configuration: .starEyes)
 }
