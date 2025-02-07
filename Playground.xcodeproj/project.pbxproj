@@ -44,6 +44,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		05931BD02D56C7C6000735C9 /* Exceptions for "Playground" folder in "Playground" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 058504442D26B99800F23B1A /* Playground */;
+		};
 		05E9A86E2D39C8EC0070C587 /* Exceptions for "Widget Practice" folder in "Widget PracticeExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -56,6 +63,9 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		058504472D26B99800F23B1A /* Playground */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				05931BD02D56C7C6000735C9 /* Exceptions for "Playground" folder in "Playground" target */,
+			);
 			path = Playground;
 			sourceTree = "<group>";
 		};
@@ -377,6 +387,7 @@
 				DEVELOPMENT_TEAM = 3523G85NQ2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Playground/Info.plist;
 				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_NSSupportsLiveActivitiesFrequentUpdates = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -408,6 +419,7 @@
 				DEVELOPMENT_TEAM = 3523G85NQ2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Playground/Info.plist;
 				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_NSSupportsLiveActivitiesFrequentUpdates = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
