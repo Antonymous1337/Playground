@@ -15,7 +15,6 @@ struct MutedColorPractice: View {
                 .padding()
                 .background {
                     RoundedRectangle(cornerRadius: 25.0)
-                        .fill(Color.mutedYellow)
                 }
                 .padding()
         }

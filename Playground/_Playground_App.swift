@@ -12,7 +12,7 @@ import SwiftData
 struct PlaygroundApp: App {
     var body: some Scene {
         WindowGroup {
-            ContainerPractice()
+            AsyncViewLoadingTest()
         }
     }
 }
